@@ -1,0 +1,12 @@
+# 비밀값 — 절대 커밋하지 않기
+.env
+.env.*
+!.env.example
+
+# 의존성·빌드
+node_modules/
+dist/
+
+# OS
+.DS_Store
+Thumbs.db

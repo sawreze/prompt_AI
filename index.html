@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 개발 프롬프트 메이커</title>
+  <meta name="description" content="만들고 싶은 서비스를 편하게 적으면 AI 코딩 도구에 바로 붙여넣을 수 있는 개발 프롬프트로 정리해 드려요.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ========== 히어로 ========== -->
+  <header class="hero">
+    <h1 class="hero__title">
+      AI에게 뭐라고 말할지<br>
+      <span class="hero__highlight">막막할 때</span> 시작해 보세요.
+    </h1>
+    <p class="hero__desc">만들고 싶은 서비스를 편하게 적어 주세요. AI 코딩 도구에 바로 붙여넣을 수 있는 개발 프롬프트로 정리해 드려요.</p>
+
+    <ol class="steps">
+      <li class="steps__item"><span class="steps__num">01</span>만들고 싶은 것 적기</li>
+      <li class="steps__item"><span class="steps__num">02</span>개발 프롬프트 받기</li>
+      <li class="steps__item"><span class="steps__num">03</span>AI 코딩 도구에 붙여넣기</li>
+    </ol>
+  </header>
+
+  <main class="layout">
+
+    <!-- ========== 입력 카드 ========== -->
+    <section class="card card--form" aria-labelledby="form-title">
+      <div class="card__head">
+        <span class="card__eyebrow">LET'S MAKE IT</span>
+        <h2 id="form-title" class="card__title">무엇을 만들고 싶나요?</h2>
+        <p class="card__sub">개발 용어를 몰라도 괜찮아요. 생각나는 대로 적어 주세요.</p>
+      </div>
+
+      <form id="prompt-form" class="form" novalidate>
+        <div class="form__row">
+          <div class="field">
+            <label for="category" class="field__label">만들 것의 종류 <small class="field__req">필수</small></label>
+            <select id="category" name="category" class="field__control" required>
+              <option value="">어떤 종류인가요?</option>
+              <option value="web">웹사이트 · 랜딩페이지</option>
+              <option value="app">모바일 앱</option>
+              <option value="auto">업무 자동화 · 엑셀</option>
+              <option value="data">데이터 정리 · 분석</option>
+              <option value="bot">챗봇 · AI 기능</option>
+              <option value="game">간단한 게임</option>
+              <option value="etc">기타</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="topic" class="field__label">주제 <small class="field__req">필수</small></label>
+            <input id="topic" name="topic" type="text" class="field__control" placeholder="예: 동네 카페 홈페이지" required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="title" class="field__label">프롬프트 제목 <small class="field__req">필수</small></label>
+          <input id="title" name="title" type="text" class="field__control" placeholder="예: 메뉴판이 있는 카페 소개 사이트 만들기" required>
+        </div>
+
+        <div class="field">
+          <label for="description" class="field__label">자세한 설명 <small class="field__req">필수</small></label>
+          <p id="description-hint" class="field__hint">누가 쓰는지, 꼭 있어야 하는 기능, 원하는 분위기나 참고할 서비스를 편하게 적어 주세요.</p>
+          <textarea id="description" name="description" class="field__control field__control--textarea" rows="8" maxlength="12000" aria-describedby="description-hint" placeholder="예: 동네 작은 카페 홈페이지를 만들고 싶어. 메뉴와 가격, 영업시간, 지도가 보였으면 좋겠고, 휴대폰에서도 잘 보여야 해." required></textarea>
+          <div class="field__meta">
+            <button type="button" id="btn-example" class="link-btn">예시 넣어보기</button>
+            <span id="char-count" class="field__count">0 / 12,000</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="format" class="field__label">결과 형식</label>
+          <select id="format" name="format" class="field__control">
+            <option value="text">일반 텍스트</option>
+            <option value="md">마크다운</option>
+            <option value="steps">단계별로 나눠서 (큰 프로젝트용)</option>
+          </select>
+        </div>
+
+        <p id="form-error" class="form__error" role="alert" hidden>필수 항목을 모두 채워 주세요.</p>
+
+        <button type="submit" id="btn-generate" class="btn-primary">내 개발 프롬프트 만들기</button>
+      </form>
+    </section>
+
+    <!-- ========== 결과 카드 ========== -->
+    <section class="card card--result" aria-labelledby="result-title">
+      <div class="card__head">
+        <span class="card__eyebrow">YOUR RESULT</span>
+        <h2 id="result-title" class="card__title">완성된 개발 프롬프트</h2>
+      </div>
+
+      <div id="result-area" class="result" aria-live="polite">
+        <!-- 상태 1: 비어 있음 -->
+        <div id="result-empty" class="result__empty">
+          <p class="result__empty-title">여기에 결과가 보여요</p>
+          <p class="result__empty-desc">왼쪽에 만들고 싶은 것을 적고<br>버튼을 눌러 보세요.</p>
+        </div>
+
+        <!-- 상태 2: 생성 중 -->
+        <div id="result-loading" class="result__loading" hidden>
+          <p>프롬프트를 정리하고 있어요…</p>
+        </div>
+
+        <!-- 상태 3: 결과 -->
+        <pre id="result-output" class="result__output" hidden></pre>
+      </div>
+
+      <div class="result__footer">
+        <span class="result__credit">NVIDIA AI로 만들었어요</span>
+        <button type="button" id="btn-copy" class="btn-secondary" disabled>복사하기</button>
+      </div>
+
+      <aside class="tip">
+        <p class="tip__title">작은 팁</p>
+        <p class="tip__desc">결과를 ChatGPT, Claude, Gemini, Cursor 같은 AI 코딩 도구에 붙여넣으세요. 결과가 아쉬우면 ‘누가 쓰는지’와 ‘꼭 필요한 기능’을 한 줄씩 더 적어 보세요.</p>
+      </aside>
+    </section>
+
+  </main>
+
+  <!-- API 키는 여기 넣지 마세요. 서버(/api/generate)에서만 NVIDIA API를 호출합니다. -->
+  <script src="app.js"></script>
+</body>
+</html>
